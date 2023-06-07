@@ -156,91 +156,52 @@ makeFiles('admins', 'Admins', {
   name: ['string', ''],
   password: ['string', ''],
   email: ['string', ''],
-  token: ['string', ''],
+  hashed_password: ['string', ''],
+  hashed_refresh_token: ['string', '']
 });
 
-// USERS
-makeFiles('users', 'Users', {
-  username: ['string', ''],
-  password: ['string', ''],
-  token: ['string', ''],
+// ABOUT
+makeFiles('abouts', 'abouts', {
+  description: ['string', ''],
+  image: ['string', '']
 });
-
-// POSTS
-makeFiles('posts', 'Posts', {
-  title: ['string', ''],
-  content: ['string', ''],
-  tags: ['string', ''],
-});
-
+  
 // PROJECTS
 makeFiles('projects', 'Projects', {
   title: ['string', ''],
-  preview: ['string', ''],
-  demo: ['string', ''],
-  img: ['string', ''],
+  image: ['string', ''],
   description: ['string', ''],
-  tags: ['string', ''],
+  preview: ['string', ''],
+  direction: ['string', '']
 });
 
-// SOCIALS
+// SOCIAL MEDIA
 makeFiles('socials', 'Socials', {
   name: ['string', ''],
   link: ['string', ''],
   icon: ['string', ''],
 });
 
-// SKILL_TYPE
-makeFiles('skill-type', 'SkillType', {
-  name: ['string', ''],
-});
-
 // SKILLS
 makeFiles('skills', 'Skills', {
-  title: ['string', ''],
+  name: ['string', ''],
   icon: ['string', ''],
-  skill_type_id: [
-    'mongoose.Schema.Types.ObjectId',
-    "[{ type: mongoose.Schema.Types.ObjectId, ref:'SkillType'  }]",
-  ],
-  percent: ['string', ''],
 });
 
-// ACADEMY
-makeFiles('academy', 'Academy', {
+// EDUCATION
+makeFiles('education', 'education', {
   name: ['string', ''],
-  time: ['string', ''],
-  description: ['string', ''],
+  link: ['string', ''],
+  icon: ['string', ''],
+  date: ['string', ''],
+  direction: ['string', ''],
 });
 
-// COMMENTS
-makeFiles('comments', 'Comments', {
-  user_id: [
-    'mongoose.Schema.Types.ObjectId',
-    "[{ type: mongoose.Schema.Types.ObjectId, ref:'Users'  }]",
-  ],
-  time: ['string', ''],
-  content: ['string', ''],
-});
-
-// REACTIONS
-makeFiles('reactions', 'Reactions', {
+// CONTACT
+makeFiles('contact', 'contact', {
   name: ['string', ''],
-  img: ['string', ''],
+  email: ['string', ''],
+  title: ['string', ''],
+  message: ['string', '']
 });
 
-// POST_REACTIONS
-makeFiles('post-reactions', 'PostReactions', {
-  reaction_id: [
-    'mongoose.Schema.Types.ObjectId',
-    "[{ type: mongoose.Schema.Types.ObjectId, ref:'Reactions'  }]",
-  ],
-  post_id: [
-    'mongoose.Schema.Types.ObjectId',
-    "[{ type: mongoose.Schema.Types.ObjectId, ref:'Post'  }]",
-  ],
-  user_id: [
-    'mongoose.Schema.Types.ObjectId',
-    "[{ type: mongoose.Schema.Types.ObjectId, ref:'Users'  }]",
-  ],
-});
