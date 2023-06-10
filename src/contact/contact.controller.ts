@@ -3,61 +3,46 @@ import {
   Get,
   Post,
   Body,
-  Put,
   Param,
   Delete,
-  UseGuards,
   Query,
+  Patch,
 } from '@nestjs/common';
-import { contactService } from './contact.service';
+import { ContactService } from './contact.service';
 import { CreatecontactDto } from './dto/create-contact.dto';
 import { UpdatecontactDto } from './dto/update-contact.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-// import { JwtAuthGuard } from '../../guards/jwt-auth.guards';
-import { HttpCode } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('contact')
 @Controller('contact')
-export class contactController {
-  constructor(private readonly contactService: contactService) {}
+export class ContactController {
+  constructor(private readonly contactService: ContactService) {}
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Create contact' })
   @Post()
   create(@Body() createcontactDto: CreatecontactDto) {
     return this.contactService.create(createcontactDto);
   }
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Find all contact' })
   @Get()
-  findAll(@Query() query: any) {
-    return this.contactService.findAll(query);
+  findAll() {
+    return this.contactService.findAll();
   }
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Get one contact' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contactService.findOne(id);
+  findOne(@Param('id') id: number) {
+    return this.contactService.findOne(+id);
   }
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Update contact by id' })
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updatecontactDto: UpdatecontactDto) {
-    return this.contactService.update(id, updatecontactDto);
+  @Patch(':id')
+  update(
+    @Param('id') id: number, 
+    @Body() updatecontactDto: UpdatecontactDto
+    ) {
+    return this.contactService.update(+id, updatecontactDto);
   }
-
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Delete contact by id' })
+  
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.contactService.remove(id);
+  delete(@Param('id') id: number): Promise<number> {
+    return this.contactService.delete(id);
   }
 }

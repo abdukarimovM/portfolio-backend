@@ -3,61 +3,55 @@ import {
   Get,
   Post,
   Body,
-  Put,
+  Patch,
   Param,
   Delete,
-  UseGuards,
-  Query,
+  Put,
 } from '@nestjs/common';
 import { AdminsService } from './admins.service';
 import { CreateAdminsDto } from './dto/create-admins.dto';
 import { UpdateAdminsDto } from './dto/update-admins.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-// import { JwtAuthGuard } from '../../guards/jwt-auth.guards';
-import { HttpCode } from '@nestjs/common';
+import { LoginAdminDto } from './dto/login-admin.dto';
 
-@ApiTags('Admins')
-@Controller('admins')
+@Controller('admin')
 export class AdminsController {
-  constructor(private readonly adminsService: AdminsService) {}
+  constructor(private readonly adminService: AdminsService) {}
 
-  // @UseGuards(AdminGuards)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Create admins' })
+  @Post('auth/register')
+  async register(@Body() createAdminDto: CreateAdminsDto) {
+    return this.adminService.register(createAdminDto);
+  }
+
+  @Post('auth/login')
+  async login(@Body() loginAdminDto: LoginAdminDto) {
+    return this.adminService.login(loginAdminDto);
+  }
+
   @Post()
-  create(@Body() createAdminsDto: CreateAdminsDto) {
-    return this.adminsService.create(createAdminsDto);
+  async create(@Body() createAdminDto: CreateAdminsDto) {
+    return this.adminService.create(createAdminDto);
   }
 
-  // @UseGuards(AdminGuards)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Find all admins' })
   @Get()
-  findAll(@Query() query: any) {
-    return this.adminsService.findAll(query);
+  async findAll() {
+    return this.adminService.findAll();
   }
 
-  // @UseGuards(AdminGuards)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Get one admins' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.adminsService.findOne(id);
+  async findOne(@Param('id') id: number) {
+    return this.adminService.findOne(id);
   }
 
-  // @UseGuards(AdminGuards)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Update admins by id' })
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateAdminsDto: UpdateAdminsDto) {
-    return this.adminsService.update(id, updateAdminsDto);
+  async update(
+    @Param('id') id: number,
+    @Body() updateAdminDto: UpdateAdminsDto,
+  ) {
+    return this.adminService.update(+id, updateAdminDto);
   }
 
-  // @UseGuards(AdminGuards)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Delete admins by id' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.adminsService.remove(id);
+  async delete(@Param('id') id: number): Promise<number> {
+    return this.adminService.delete(id);
   }
 }

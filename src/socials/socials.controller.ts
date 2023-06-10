@@ -33,8 +33,8 @@ export class SocialsController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Find all socials' })
   @Get()
-  findAll(@Query() query: any) {
-    return this.socialsService.findAll(query);
+  findAll() {
+    return this.socialsService.findAll();
   }
 
   //  @UseGuards(JwtAuthGuard)

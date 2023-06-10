@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
 import { SocialsService } from './socials.service';
 import { SocialsController } from './socials.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Socials, SocialsSchema } from './schemas/socials.schema';
+import { Socials } from './models/socials.model';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Socials.name, schema: SocialsSchema }]),
-    JwtModule,
-  ],
+  imports: [SequelizeModule.forFeature([Socials]), JwtModule],
   controllers: [SocialsController],
   providers: [SocialsService],
+  exports: [SocialsService],
 })
 export class SocialsModule {}

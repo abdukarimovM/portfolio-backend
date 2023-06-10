@@ -3,61 +3,46 @@ import {
   Get,
   Post,
   Body,
-  Put,
   Param,
   Delete,
-  UseGuards,
-  Query,
+  Patch,
 } from '@nestjs/common';
-import { educationService } from './education.service';
+import { EducationService } from './education.service';
 import { CreateeducationDto } from './dto/create-education.dto';
 import { UpdateeducationDto } from './dto/update-education.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 // import { JwtAuthGuard } from '../../guards/jwt-auth.guards';
-import { HttpCode } from '@nestjs/common';
 
 @ApiTags('education')
 @Controller('education')
-export class educationController {
-  constructor(private readonly educationService: educationService) {}
+export class EducationController {
+  constructor(private readonly educationService: EducationService) {}
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Create education' })
   @Post()
-  create(@Body() createeducationDto: CreateeducationDto) {
-    return this.educationService.create(createeducationDto);
+  async create(@Body() createEducationDto: CreateeducationDto) {
+    return this.educationService.create(createEducationDto);
   }
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Find all education' })
   @Get()
-  findAll(@Query() query: any) {
-    return this.educationService.findAll(query);
+  async findAll() {
+    return this.educationService.findAll();
   }
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Get one education' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.educationService.findOne(id);
   }
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Update education by id' })
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateeducationDto: UpdateeducationDto) {
-    return this.educationService.update(id, updateeducationDto);
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateEducationDto: UpdateeducationDto,
+  ) {
+    return this.educationService.update(id, updateEducationDto);
   }
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Delete education by id' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.educationService.remove(id);
   }
 }

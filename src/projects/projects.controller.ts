@@ -25,7 +25,7 @@ export class ProjectsController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Create projects' })
   @Post()
-  create(@Body() createProjectsDto: CreateProjectsDto) {
+  async create(@Body() createProjectsDto: CreateProjectsDto) {
     return this.projectsService.create(createProjectsDto);
   }
 
@@ -33,15 +33,15 @@ export class ProjectsController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Find all projects' })
   @Get()
-  findAll(@Query() query: any) {
-    return this.projectsService.findAll(query);
+  async findAll(@Query() query: any) {
+    return this.projectsService.findAll();
   }
 
   //  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Get one projects' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.projectsService.findOne(id);
   }
 
@@ -49,7 +49,7 @@ export class ProjectsController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Update projects by id' })
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateProjectsDto: UpdateProjectsDto) {
+  async update(@Param('id') id: string, @Body() updateProjectsDto: UpdateProjectsDto) {
     return this.projectsService.update(id, updateProjectsDto);
   }
 
@@ -57,7 +57,7 @@ export class ProjectsController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Delete projects by id' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.projectsService.remove(id);
   }
 }

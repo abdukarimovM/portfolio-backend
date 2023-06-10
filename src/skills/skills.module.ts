@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
 import { SkillsService } from './skills.service';
 import { SkillsController } from './skills.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Skills, SkillsSchema } from './schemas/skills.schema';
+import { Skill  } from './models/skills.model';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Skills.name, schema: SkillsSchema }]),
-    JwtModule,
-  ],
+  imports: [SequelizeModule.forFeature([Skill]), JwtModule],
   controllers: [SkillsController],
   providers: [SkillsService],
+  exports: [SkillsService],
 })
 export class SkillsModule {}

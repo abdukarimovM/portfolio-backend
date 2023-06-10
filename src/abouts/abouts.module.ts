@@ -1,16 +1,13 @@
 import { Module } from '@nestjs/common';
-import { aboutsService } from './abouts.service';
-import { aboutsController } from './abouts.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { abouts, aboutsSchema } from './schemas/abouts.schema';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { Abouts } from './models/abouts.model';
+import { AboutsController } from './abouts.controller';
+import { AboutsService } from './abouts.service';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: abouts.name, schema: aboutsSchema }]),
-    JwtModule,
-  ],
-  controllers: [aboutsController],
-  providers: [aboutsService],
+  imports: [SequelizeModule.forFeature([Abouts]), JwtModule],
+  controllers: [AboutsController],
+  providers: [AboutsService],
 })
-export class aboutsModule {}
+export class AboutsModule {}

@@ -6,7 +6,6 @@ import {
   Put,
   Param,
   Delete,
-  UseGuards,
   Query,
 } from '@nestjs/common';
 import { SkillsService } from './skills.service';
@@ -34,7 +33,7 @@ export class SkillsController {
   @ApiOperation({ summary: 'Find all skills' })
   @Get()
   findAll(@Query() query: any) {
-    return this.skillsService.findAll(query);
+    return this.skillsService.findAll();
   }
 
   //  @UseGuards(JwtAuthGuard)

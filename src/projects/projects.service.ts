@@ -1,38 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateProjectsDto } from './dto/create-projects.dto';
 import { UpdateProjectsDto } from './dto/update-projects.dto';
-import { Projects, ProjectsDocument } from './schemas/projects.schema';
+import { Projects } from './models/projects.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class ProjectsService {
   constructor(
-    @InjectModel(Projects.name)
-    private orderModel: Model<ProjectsDocument>,
-  ) {}
+    @InjectModel('Projects') private  projectRepository: typeof Projects) {}
 
   async create(createProjectsDto: CreateProjectsDto) {
-    const res = await new this.orderModel(createProjectsDto).save();
-    return res;
+    const id = uuid();
+    return this.projectRepository.create({ id, ...createProjectsDto });
   }
 
-  async findAll(query: string) {
-    const res = await this.orderModel.find().exec();
-    return res;
+  async findAll() {
+    return this.projectRepository.findAll({
+      attributes: [
+        'id',
+        'title',
+        'image',
+        'description',
+        'preview',
+        'direction',
+      ],
+    });
   }
 
   async findOne(id: string) {
-    return this.orderModel.findById(id).exec();
+    const project = await this.projectRepository.findOne({
+      where: { id },
+      attributes: [
+        'id',
+        'title',
+        'image',
+        'description',
+        'preview',
+        'direction',
+      ],
+    });
+    if (!project) {
+      throw new HttpException('Project not found', HttpStatus.NOT_FOUND);
+    }
+    return project;
   }
 
   async update(id: string, updateProjectsDto: UpdateProjectsDto) {
-    return this.orderModel
-      .findByIdAndUpdate(id, updateProjectsDto, { new: true })
-      .exec();
+    await this.findOne(id);
+    await this.projectRepository.update(updateProjectsDto, { where: { id } });
+    return this.findOne(id);
   }
 
   async remove(id: string) {
-    return this.orderModel.findByIdAndDelete(id).exec();
-  }
+    const project = await this.findOne(id);
+    await this.projectRepository.destroy({ where: { id } });
+    return project;  }
 }

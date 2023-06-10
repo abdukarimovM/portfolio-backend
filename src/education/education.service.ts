@@ -1,38 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateeducationDto } from './dto/create-education.dto';
 import { UpdateeducationDto } from './dto/update-education.dto';
-import { education, educationDocument } from './schemas/education.schema';
+import { Education } from './models/education.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
-export class educationService {
-  constructor(
-    @InjectModel(education.name)
-    private orderModel: Model<educationDocument>,
-  ) {}
+export class EducationService {
+ 
+  constructor(@InjectModel(Education) private educationRepository: typeof Education) {}
 
   async create(createeducationDto: CreateeducationDto) {
-    const res = await new this.orderModel(createeducationDto).save();
-    return res;
+    const id = uuid();
+    return this.educationRepository.create({ id, ...createeducationDto });
   }
 
-  async findAll(query: string) {
-    const res = await this.orderModel.find().exec();
-    return res;
+  async findAll() {
+    return this.educationRepository.findAll({
+      attributes: ['id', 'name', 'link', 'icon', 'date', 'direction'],
+    });
   }
 
   async findOne(id: string) {
-    return this.orderModel.findById(id).exec();
+    const education = await this.educationRepository.findOne({
+      where: { id },
+      attributes: ['id', 'name', 'link', 'icon', 'date', 'direction'],
+    });
+    if (!education) {
+      throw new HttpException('Education not found', HttpStatus.NOT_FOUND);
+    }
+    return education;
   }
 
   async update(id: string, updateeducationDto: UpdateeducationDto) {
-    return this.orderModel
-      .findByIdAndUpdate(id, updateeducationDto, { new: true })
-      .exec();
+    await this.findOne(id);
+    await this.educationRepository.update(updateeducationDto, {
+      where: { id },
+    });
+    return this.findOne(id);  
   }
 
   async remove(id: string) {
-    return this.orderModel.findByIdAndDelete(id).exec();
-  }
+    const education = await this.findOne(id);
+    await this.educationRepository.destroy({ where: { id } });
+    return education;  }
 }

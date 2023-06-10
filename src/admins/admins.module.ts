@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AdminsService } from './admins.service';
 import { AdminsController } from './admins.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Admins, AdminsSchema } from './schemas/admins.schema';
 import { JwtModule } from '@nestjs/jwt';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { Admins } from './models/admins.model';
+
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Admins.name, schema: AdminsSchema }]),
-    JwtModule,
-  ],
+  imports: [SequelizeModule.forFeature([Admins]), JwtModule],
   controllers: [AdminsController],
   providers: [AdminsService],
 })

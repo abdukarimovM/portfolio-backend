@@ -1,16 +1,13 @@
 import { Module } from '@nestjs/common';
-import { contactService } from './contact.service';
-import { contactController } from './contact.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { contact, contactSchema } from './schemas/contact.schema';
+import { ContactService } from './contact.service';
+import { ContactController } from './contact.controller';
+import { Contact } from './models/contact.model';
 import { JwtModule } from '@nestjs/jwt';
+import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: contact.name, schema: contactSchema }]),
-    JwtModule,
-  ],
-  controllers: [contactController],
-  providers: [contactService],
+  imports: [SequelizeModule.forFeature([Contact]), JwtModule],
+  controllers: [ContactController],
+  providers: [ContactService],
 })
-export class contactModule {}
+export class ContactModule {}

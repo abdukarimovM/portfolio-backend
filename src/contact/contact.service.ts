@@ -1,38 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatecontactDto } from './dto/create-contact.dto';
 import { UpdatecontactDto } from './dto/update-contact.dto';
-import { contact, contactDocument } from './schemas/contact.schema';
+import { Contact } from './models/contact.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
-export class contactService {
-  constructor(
-    @InjectModel(contact.name)
-    private orderModel: Model<contactDocument>,
-  ) {}
+export class ContactService {
+  constructor(@InjectModel(Contact) private contactRepository: typeof Contact) {}
 
   async create(createcontactDto: CreatecontactDto) {
-    const res = await new this.orderModel(createcontactDto).save();
-    return res;
+    return this.contactRepository.create({ ...CreatecontactDto });
   }
 
-  async findAll(query: string) {
-    const res = await this.orderModel.find().exec();
-    return res;
+  async findAll() {
+    return await this.contactRepository.findAll({ include: { all: true } });
   }
 
-  async findOne(id: string) {
-    return this.orderModel.findById(id).exec();
+  async findOne(id: number) {
+    return await this.contactRepository.findByPk(id);
   }
 
-  async update(id: string, updatecontactDto: UpdatecontactDto) {
-    return this.orderModel
-      .findByIdAndUpdate(id, updatecontactDto, { new: true })
-      .exec();
+  async update(id: number, updatecontactDto: UpdatecontactDto) {
+    return await this.contactRepository.update(updatecontactDto, {
+      where: { id },
+      returning: true,
+    });
   }
 
-  async remove(id: string) {
-    return this.orderModel.findByIdAndDelete(id).exec();
+  async delete(id: number): Promise<number> {
+    const result = await this.contactRepository.destroy({ where: { id } });
+    return result;
   }
 }

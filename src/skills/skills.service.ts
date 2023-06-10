@@ -1,38 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateSkillsDto } from './dto/create-skills.dto';
 import { UpdateSkillsDto } from './dto/update-skills.dto';
-import { Skills, SkillsDocument } from './schemas/skills.schema';
+import { Skill } from './models/skills.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class SkillsService {
-  constructor(
-    @InjectModel(Skills.name)
-    private orderModel: Model<SkillsDocument>,
-  ) {}
+  constructor(@InjectModel('Skill') private skillRepository: typeof Skill) {}
+
 
   async create(createSkillsDto: CreateSkillsDto) {
-    const res = await new this.orderModel(createSkillsDto).save();
-    return res;
+    const id = uuid();
+    return this.skillRepository.create({ id, ...createSkillsDto });
   }
 
-  async findAll(query: string) {
-    const res = await this.orderModel.find().exec();
-    return res;
+  async findAll() {
+    return this.skillRepository.findAll({
+      attributes: ['id', 'name', 'icon'],
+    });
   }
 
   async findOne(id: string) {
-    return this.orderModel.findById(id).exec();
+    const skill = await this.skillRepository.findOne({
+      where: { id },
+      attributes: ['id', 'name', 'icon'],
+    });
+    if (!skill) {
+      throw new HttpException('Skill not found', HttpStatus.NOT_FOUND);
+    }
+    return skill;
   }
 
   async update(id: string, updateSkillsDto: UpdateSkillsDto) {
-    return this.orderModel
-      .findByIdAndUpdate(id, updateSkillsDto, { new: true })
-      .exec();
+    await this.findOne(id);
+    await this.skillRepository.update(updateSkillsDto, { where: { id } });
+    return this.findOne(id);
   }
 
   async remove(id: string) {
-    return this.orderModel.findByIdAndDelete(id).exec();
+    const skill = await this.findOne(id);
+    await this.skillRepository.destroy({ where: { id } });
+    return skill;
   }
 }

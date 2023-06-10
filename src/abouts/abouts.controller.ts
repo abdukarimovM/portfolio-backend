@@ -8,56 +8,44 @@ import {
   Delete,
   UseGuards,
   Query,
+  Patch,
 } from '@nestjs/common';
-import { aboutsService } from './abouts.service';
+import { AboutsService } from './abouts.service';
 import { CreateaboutsDto } from './dto/create-abouts.dto';
 import { UpdateaboutsDto } from './dto/update-abouts.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-// import { JwtAuthGuard } from '../../guards/jwt-auth.guards';
-import { HttpCode } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
 
 @ApiTags('abouts')
 @Controller('abouts')
-export class aboutsController {
-  constructor(private readonly aboutsService: aboutsService) {}
+export class AboutsController {
+  constructor(private readonly aboutsService: AboutsService) {}
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Create abouts' })
   @Post()
   create(@Body() createaboutsDto: CreateaboutsDto) {
     return this.aboutsService.create(createaboutsDto);
   }
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Find all abouts' })
   @Get()
-  findAll(@Query() query: any) {
-    return this.aboutsService.findAll(query);
+  findAll() {
+    return this.aboutsService.findAll();
   }
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Get one abouts' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.aboutsService.findOne(id);
   }
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Update abouts by id' })
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateaboutsDto: UpdateaboutsDto) {
-    return this.aboutsService.update(id, updateaboutsDto);
+  @Patch(':id')
+  async update(
+    @Param('id') id: number, 
+    @Body() updateAboutsDto: UpdateaboutsDto
+    ) {
+    return await this.aboutsService.update(+id, updateAboutsDto);
   }
 
-  //  @UseGuards(JwtAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Delete abouts by id' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.aboutsService.remove(id);
+  async deleter(@Param('id') id: number): Promise<number> {
+    return await this.aboutsService.delete(id);
   }
 }

@@ -1,38 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateaboutsDto } from './dto/create-abouts.dto';
 import { UpdateaboutsDto } from './dto/update-abouts.dto';
-import { abouts, aboutsDocument } from './schemas/abouts.schema';
+import { Abouts } from './models/abouts.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
-export class aboutsService {
-  constructor(
-    @InjectModel(abouts.name)
-    private orderModel: Model<aboutsDocument>,
-  ) {}
+export class AboutsService {
+  constructor(@InjectModel(Abouts)
+  private aboutsRepository: typeof Abouts) { }
 
-  async create(createaboutsDto: CreateaboutsDto) {
-    const res = await new this.orderModel(createaboutsDto).save();
-    return res;
+  async create(createAboutsDto: CreateaboutsDto) {
+    return this.aboutsRepository.create({...createAboutsDto });
   }
 
-  async findAll(query: string) {
-    const res = await this.orderModel.find().exec();
-    return res;
+  async findAll() {
+    return await this.aboutsRepository.findAll({ include: { all: true } });
+
   }
 
-  async findOne(id: string) {
-    return this.orderModel.findById(id).exec();
+  async findOne(id: number) {
+    return await this.aboutsRepository.findByPk(id);
+
   }
 
-  async update(id: string, updateaboutsDto: UpdateaboutsDto) {
-    return this.orderModel
-      .findByIdAndUpdate(id, updateaboutsDto, { new: true })
-      .exec();
+  async update(id: number, updateAboutsDto: UpdateaboutsDto) {
+    return await this.aboutsRepository.update(updateAboutsDto, {
+      where: { id },
+      returning: true,
+    });
   }
 
-  async remove(id: string) {
-    return this.orderModel.findByIdAndDelete(id).exec();
+  async delete(id: number) {
+    const result = await this.aboutsRepository.destroy({ where: { id } });
+    return result;
   }
 }
