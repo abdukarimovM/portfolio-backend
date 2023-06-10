@@ -13,7 +13,6 @@ import { ProjectsService } from './projects.service';
 import { CreateProjectsDto } from './dto/create-projects.dto';
 import { UpdateProjectsDto } from './dto/update-projects.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-// import { JwtAuthGuard } from '../../guards/jwt-auth.guards';
 import { HttpCode } from '@nestjs/common';
 
 @ApiTags('Projects')
@@ -49,7 +48,10 @@ export class ProjectsController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Update projects by id' })
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateProjectsDto: UpdateProjectsDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateProjectsDto: UpdateProjectsDto,
+  ) {
     return this.projectsService.update(id, updateProjectsDto);
   }
 

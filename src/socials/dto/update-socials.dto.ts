@@ -16,5 +16,4 @@ export class UpdateSocialsDto {
   @IsString()
   @ApiProperty({ example: 'bx bxl-github' })
   icon?: string;
-  }
-  
+}

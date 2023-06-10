@@ -2,12 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatecontactDto } from './dto/create-contact.dto';
 import { UpdatecontactDto } from './dto/update-contact.dto';
 import { Contact } from './models/contact.model';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectModel } from '@nestjs/sequelize';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class ContactService {
-  constructor(@InjectModel(Contact) private contactRepository: typeof Contact) {}
+  constructor(
+    @InjectModel(Contact) private contactRepository: typeof Contact,
+  ) {}
 
   async create(createcontactDto: CreatecontactDto) {
     return this.contactRepository.create({ ...CreatecontactDto });

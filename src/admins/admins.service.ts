@@ -20,7 +20,7 @@ export class AdminsService {
     @InjectModel(Admins) private adminRepository: typeof Admins,
     private readonly jwtService: JwtService,
   ) {}
-  
+
   //////////////////////////////////////////////////////////////////////////////////
   async register(createAdminDto: CreateAdminsDto) {
     const adminByEmail = await this.getAdminByEmail(createAdminDto.email);
@@ -117,7 +117,7 @@ export class AdminsService {
 
   async delete(id: number) {
     const result = await this.adminRepository.destroy({ where: { id } });
-    return result;  
+    return result;
   }
 
   /////////////////////////////////////////////////////////////////////////////

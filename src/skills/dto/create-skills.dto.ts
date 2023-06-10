@@ -11,6 +11,4 @@ export class CreateSkillsDto {
   @IsString()
   @ApiProperty({ example: 'bx bxl-nodejs' })
   icon: string;
-
 }
-  

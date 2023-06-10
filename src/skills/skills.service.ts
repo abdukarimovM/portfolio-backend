@@ -2,13 +2,12 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateSkillsDto } from './dto/create-skills.dto';
 import { UpdateSkillsDto } from './dto/update-skills.dto';
 import { Skill } from './models/skills.model';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectModel } from '@nestjs/sequelize';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class SkillsService {
-  constructor(@InjectModel('Skill') private skillRepository: typeof Skill) {}
-
+  constructor(@InjectModel(Skill) private skillRepository: typeof Skill) {}
 
   async create(createSkillsDto: CreateSkillsDto) {
     const id = uuid();

@@ -2,13 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateProjectsDto } from './dto/create-projects.dto';
 import { UpdateProjectsDto } from './dto/update-projects.dto';
 import { Projects } from './models/projects.model';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectModel } from '@nestjs/sequelize';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class ProjectsService {
   constructor(
-    @InjectModel('Projects') private  projectRepository: typeof Projects) {}
+    @InjectModel(Projects) private projectRepository: typeof Projects,
+  ) {}
 
   async create(createProjectsDto: CreateProjectsDto) {
     const id = uuid();
@@ -55,5 +56,6 @@ export class ProjectsService {
   async remove(id: string) {
     const project = await this.findOne(id);
     await this.projectRepository.destroy({ where: { id } });
-    return project;  }
+    return project;
+  }
 }

@@ -5,7 +5,6 @@ import { resolve } from 'path';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Education } from './education/models/education.model';
 import { Socials } from './socials/models/socials.model';
-import { Skill } from './skills/models/skills.model';
 import { Abouts } from './abouts/models/abouts.model';
 import { Admins } from './admins/models/admins.model';
 import { Contact } from './contact/models/contact.model';
@@ -17,7 +16,7 @@ import { EducationModule } from './education/education.module';
 import { ProjectsModule } from './projects/projects.module';
 import { SocialsModule } from './socials/socials.module';
 import { SkillsModule } from './skills/skills.module';
-
+import { Skill } from './skills/models/skills.model';
 
 @Module({
   imports: [
@@ -35,25 +34,20 @@ import { SkillsModule } from './skills/skills.module';
       username: process.env.POSTGRES_USER,
       password: String(process.env.POSTGRES_PASSWORD),
       database: process.env.POSTGRES_DB,
-      models: [
-        Abouts,
-        Admins,
-        Contact,
-        Education,
-        Projects,
-        Socials,
-        Skill,
-      ],
+      models: [Abouts, Admins, Contact, Education, Projects, Socials, Skill],
       autoLoadModels: true,
-      logging: false,
+      logging: (query) => {
+        // Custom logging logic here
+        console.log('Sequelize query:', query);
+      },
     }),
-    // AboutsModule,
+    AboutsModule,
     AdminsModule,
-    // ContactModule,
-    // EducationModule,
-    // ProjectsModule,
-    // SocialsModule,
-    // SkillsModule
+    ContactModule,
+    EducationModule,
+    ProjectsModule,
+    SocialsModule,
+    SkillsModule,
   ],
   controllers: [],
   providers: [],

@@ -17,7 +17,7 @@ async function bootstrap() {
     .setTitle('NestJS')
     .setDescription('REST API')
     .setVersion('1.0.0')
-    .addTag('NodeJS, NestJS, Postgres, sequalize')
+    .addTag('NodeJS, NestJS, Postgres, sequelize')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/api/docs', app, document);

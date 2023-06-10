@@ -2,12 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateSocialsDto } from './dto/create-socials.dto';
 import { UpdateSocialsDto } from './dto/update-socials.dto';
 import { Socials } from './models/socials.model';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectModel } from '@nestjs/sequelize';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class SocialsService {
-  constructor(@InjectModel('Socials') private socialsRepository: typeof Socials) {}
+  constructor(
+    @InjectModel(Socials) private socialsRepository: typeof Socials,
+  ) {}
 
   async create(createSocialsDto: CreateSocialsDto) {
     const id = uuid();
@@ -28,7 +30,8 @@ export class SocialsService {
     if (!socials) {
       throw new HttpException('Skill not found', HttpStatus.NOT_FOUND);
     }
-    return socials;  }
+    return socials;
+  }
 
   async update(id: string, updateSocialsDto: UpdateSocialsDto) {
     await this.findOne(id);
@@ -39,5 +42,6 @@ export class SocialsService {
   async remove(id: string) {
     const skill = await this.findOne(id);
     await this.socialsRepository.destroy({ where: { id } });
-    return skill;  }
+    return skill;
+  }
 }
