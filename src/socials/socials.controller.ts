@@ -21,7 +21,6 @@ import { HttpCode } from '@nestjs/common';
 export class SocialsController {
   constructor(private readonly socialsService: SocialsService) {}
 
-  //  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Create socials' })
   @Post()
@@ -29,7 +28,6 @@ export class SocialsController {
     return this.socialsService.create(createSocialsDto);
   }
 
-  //  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Find all socials' })
   @Get()
@@ -37,7 +35,6 @@ export class SocialsController {
     return this.socialsService.findAll();
   }
 
-  //  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Get one socials' })
   @Get(':id')
@@ -45,7 +42,6 @@ export class SocialsController {
     return this.socialsService.findOne(id);
   }
 
-  //  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Update socials by id' })
   @Put(':id')
@@ -53,7 +49,6 @@ export class SocialsController {
     return this.socialsService.update(id, updateSocialsDto);
   }
 
-  //  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Delete socials by id' })
   @Delete(':id')

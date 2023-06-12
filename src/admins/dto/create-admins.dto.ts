@@ -6,14 +6,13 @@ export class CreateAdminsDto {
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ example: '123' })
-  @IsStrongPassword()
-  password: string;
-
   @ApiProperty({ example: 'abdukarimov@gmail.com' })
   @IsNotEmpty()
   @IsEmail()
   email: string;
 
+  @ApiProperty({ example: '123' })
+  @IsStrongPassword()
+  password: string;
   }
   

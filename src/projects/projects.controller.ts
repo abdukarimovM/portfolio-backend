@@ -20,7 +20,6 @@ import { HttpCode } from '@nestjs/common';
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
-  //  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Create projects' })
   @Post()
@@ -28,7 +27,6 @@ export class ProjectsController {
     return this.projectsService.create(createProjectsDto);
   }
 
-  //  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Find all projects' })
   @Get()
@@ -36,7 +34,6 @@ export class ProjectsController {
     return this.projectsService.findAll();
   }
 
-  //  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Get one projects' })
   @Get(':id')
@@ -44,7 +41,6 @@ export class ProjectsController {
     return this.projectsService.findOne(id);
   }
 
-  //  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Update projects by id' })
   @Put(':id')
@@ -55,7 +51,6 @@ export class ProjectsController {
     return this.projectsService.update(id, updateProjectsDto);
   }
 
-  //  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Delete projects by id' })
   @Delete(':id')

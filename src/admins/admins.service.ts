@@ -59,8 +59,8 @@ export class AdminsService {
 
   /////////////////////////////////////////////////////////////////////////////
   async login(loginAdminDto: LoginAdminDto) {
-    const { username, password } = loginAdminDto;
-    const admin = await this.getAdminByEmail(username);
+    const { email, password } = loginAdminDto;
+    const admin = await this.getAdminByEmail(email);
     if (!admin) {
       throw new UnauthorizedException('Email or password is wrong');
     }
@@ -95,8 +95,13 @@ export class AdminsService {
 
   //////////////////////////////////////////////////////////////////////////
   async create(createAdminDto: CreateAdminsDto) {
-    const res = await this.adminRepository.create({ ...createAdminDto });
-    return res;
+    const condidate = await this.adminRepository.findOne({where: {email: createAdminDto.email}});
+    if (condidate){
+      throw new BadRequestException("Email already exist!");
+    } ;
+    const hashed_password =  await bcrypt.hash(createAdminDto.password, 7);
+    const admin = await this.adminRepository.create({...createAdminDto, hashed_password});
+    return admin;
   }
 
   async findAll() {
