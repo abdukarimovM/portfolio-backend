@@ -10,8 +10,9 @@ interface AdminAttr {
 @Table({ tableName: 'admin' })
 export class Admins extends Model<Admins, AdminAttr> {
 	@Column({
-		type: DataType.NUMBER,
+		type: DataType.INTEGER,
 		primaryKey: true,
+		autoIncrement: true,
 	  })
 	  id: number;
 

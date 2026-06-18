@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateaboutsDto } from './dto/create-abouts.dto';
 import { UpdateaboutsDto } from './dto/update-abouts.dto';
 import { Abouts } from './models/abouts.model';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectModel } from '@nestjs/sequelize';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()

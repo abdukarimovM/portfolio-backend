@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateeducationDto } from './dto/create-education.dto';
 import { UpdateeducationDto } from './dto/update-education.dto';
 import { Education } from './models/education.model';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectModel } from '@nestjs/sequelize';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
@@ -45,3 +45,4 @@ export class EducationService {
     await this.educationRepository.destroy({ where: { id } });
     return education;  }
 }
+

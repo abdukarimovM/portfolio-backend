@@ -1,40 +1,26 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-interface AdminAttr {
-	name: string;
-	email: string;
-	hashed_password: string;
-	hashed_refresh_token: string;
-  }
-
-@Table({ tableName: 'admin' })
-export class Abouts extends Model<Abouts, AdminAttr> {
-	@Column({
-		type: DataType.INTEGER,
-		primaryKey: true,
-	  })
-	  id: number;
-
-	  @Column({
-		type: DataType.STRING,
-	  })
-	  name: string;
-	
-	  @Column({
-		type: DataType.STRING,
-	  })
-	  email: string;
-	
-	  @Column({
-		type: DataType.STRING,
-	  })
-	  hashed_password: string;
-	
-	  @Column({
-		type: DataType.STRING,
-	  })
-	  hashed_refresh_token: string;
-
+interface AboutsAttr {
+  description: string;
+  image: string;
 }
 
-    
+@Table({ tableName: 'abouts' })
+export class Abouts extends Model<Abouts, AboutsAttr> {
+  @Column({
+    type: DataType.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  })
+  id: number;
+
+  @Column({
+    type: DataType.TEXT,
+  })
+  description: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  image: string;
+}

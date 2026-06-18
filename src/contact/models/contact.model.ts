@@ -10,8 +10,9 @@ interface ContactAttrs {
 @Table({ tableName: 'contact' })
 export class Contact extends Model<Contact, ContactAttrs> {
 	@Column({
-		type: DataType.NUMBER,
+		type: DataType.INTEGER,
 		primaryKey: true,
+		autoIncrement: true,
 	})
 	id: number;
 

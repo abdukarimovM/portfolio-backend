@@ -8,11 +8,13 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AdminsService } from './admins.service';
 import { CreateAdminsDto } from './dto/create-admins.dto';
 import { UpdateAdminsDto } from './dto/update-admins.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
 
+@ApiTags('Admins')
 @Controller('admin')
 export class AdminsController {
   constructor(private readonly adminService: AdminsService) {}
