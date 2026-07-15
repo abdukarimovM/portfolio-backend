@@ -10,7 +10,7 @@ export class ContactService {
   constructor(@InjectModel(Contact) private contactRepository: typeof Contact) {}
 
   async create(createcontactDto: CreatecontactDto) {
-    return this.contactRepository.create({ ...CreatecontactDto });
+    return this.contactRepository.create(createcontactDto);
   }
 
   async findAll() {

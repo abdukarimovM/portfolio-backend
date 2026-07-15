@@ -5,7 +5,7 @@ export class CreateSkillsDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({ example: 'NodeJS' })
-  title: string;
+  name: string;
 
   @IsNotEmpty()
   @IsString()

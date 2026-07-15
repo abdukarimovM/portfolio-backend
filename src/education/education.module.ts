@@ -3,10 +3,9 @@ import { EducationService } from './education.service';
 import { EducationController } from './education.controller';
 import { Education } from './models/education.model';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Education]), JwtModule],
+  imports: [SequelizeModule.forFeature([Education])],
   controllers: [EducationController],
   providers: [EducationService],
 })

@@ -1,32 +1,35 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateeducationDto {
+export class CreateEducationDto {
+
   @ApiProperty({ example: "Najot Ta'lim" })
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ example: 'https://najottalim.uz/' })
+  @ApiProperty({ example: "https://najottalim.uz" })
   @IsString()
   @IsNotEmpty()
   link: string;
 
-
-  @ApiProperty({ example: 'https://najottalim.uz/' })
+  @ApiProperty({ example: "/uploads/icon.png" })
   @IsString()
   @IsNotEmpty()
   icon: string;
 
-  @ApiProperty({ example: '2021-2023' })
-  @IsDateString()
+  @ApiProperty({ example: "2021" })
+  @IsString()
   @IsNotEmpty()
-  date: string;
+  startYear: string;
 
-  @ApiProperty({ example: 'FullStack(NodeJS + VudeJS)'})
+  @ApiProperty({ example: "2024" })
+  @IsString()
+  @IsNotEmpty()
+  endYear: string;
+
+  @ApiProperty({ example: "FullStack Developer" })
   @IsString()
   @IsNotEmpty()
   direction: string;
-
 }
-  

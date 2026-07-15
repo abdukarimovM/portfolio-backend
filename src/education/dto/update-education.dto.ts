@@ -1,30 +1,35 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
-export class UpdateeducationDto {
+export class UpdateEducationDto {
+
   @ApiProperty({ example: "Najot Ta'lim" })
   @IsOptional()
   @IsString()
   name?: string;
 
-  @ApiProperty({ example: 'https://najottalim.uz/' })
+  @ApiProperty({ example: "https://najottalim.uz" })
   @IsOptional()
   @IsString()
   link?: string;
 
-  @ApiProperty({ example: 'https://najottalim.uz/' })
+  @ApiProperty({ example: "/uploads/icon.png" })
   @IsOptional()
   @IsString()
   icon?: string;
 
-  @ApiProperty({ example: '2021-2023' })
+  @ApiProperty({ example: "2021" })
   @IsOptional()
-  @IsDateString()
-  date?: string;
+  @IsString()
+  startYear?: string;
 
-  @ApiProperty({ example: 'FullStack(NodeJS + VudeJS)'})
-  @IsOptional()  
+  @ApiProperty({ example: "2024" })
+  @IsOptional()
+  @IsString()
+  endYear?: string;
+
+  @ApiProperty({ example: "FullStack Developer" })
+  @IsOptional()
   @IsString()
   direction?: string;
-  }
-  
+}

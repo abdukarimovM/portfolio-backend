@@ -7,38 +7,59 @@ import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class SocialsService {
-  constructor(@InjectModel(Socials) private socialsRepository: typeof Socials) {}
+  constructor(
+    @InjectModel(Socials)
+    private socialsRepository: typeof Socials,
+  ) {}
 
   async create(createSocialsDto: CreateSocialsDto) {
     const id = uuid();
-    return this.socialsRepository.create({ id, ...createSocialsDto });
+
+    return this.socialsRepository.create({
+      id,
+      ...createSocialsDto,
+    });
   }
 
   async findAll() {
     return this.socialsRepository.findAll({
-      attributes: ['id', 'name', 'icon'],
+      attributes: ['id', 'name', 'icon', 'link'],
     });
   }
 
   async findOne(id: string) {
-    const socials = await this.socialsRepository.findOne({
+    const social = await this.socialsRepository.findOne({
       where: { id },
-      attributes: ['id', 'name', 'icon'],
+      attributes: ['id', 'name', 'icon', 'link'],
     });
-    if (!socials) {
-      throw new HttpException('Skill not found', HttpStatus.NOT_FOUND);
+
+    if (!social) {
+      throw new HttpException(
+        'Social not found',
+        HttpStatus.NOT_FOUND,
+      );
     }
-    return socials;  }
+
+    return social;
+  }
 
   async update(id: string, updateSocialsDto: UpdateSocialsDto) {
     await this.findOne(id);
-    await this.socialsRepository.update(updateSocialsDto, { where: { id } });
+
+    await this.socialsRepository.update(updateSocialsDto, {
+      where: { id },
+    });
+
     return this.findOne(id);
   }
 
   async remove(id: string) {
-    const skill = await this.findOne(id);
-    await this.socialsRepository.destroy({ where: { id } });
-    return skill;  }
-}
+    const social = await this.findOne(id);
 
+    await this.socialsRepository.destroy({
+      where: { id },
+    });
+
+    return social;
+  }
+}

@@ -17,6 +17,7 @@ import { EducationModule } from './education/education.module';
 import { ProjectsModule } from './projects/projects.module';
 import { SocialsModule } from './socials/socials.module';
 import { SkillsModule } from './skills/skills.module';
+import { UploadModule } from './upload/upload.module';
 
 
 @Module({
@@ -26,8 +27,9 @@ import { SkillsModule } from './skills/skills.module';
       isGlobal: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: resolve(__dirname, 'static'),
-    }),
+  rootPath: resolve(process.cwd(), 'uploads'),
+  serveRoot: '/uploads',
+}),
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -46,7 +48,8 @@ import { SkillsModule } from './skills/skills.module';
     EducationModule,
     ProjectsModule,
     SocialsModule,
-    SkillsModule
+    SkillsModule,
+    UploadModule
   ],
   controllers: [],
   providers: [],
