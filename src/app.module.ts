@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -19,7 +19,6 @@ import { SocialsModule } from './socials/socials.module';
 import { SkillsModule } from './skills/skills.module';
 import { UploadModule } from './upload/upload.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -27,29 +26,61 @@ import { UploadModule } from './upload/upload.module';
       isGlobal: true,
     }),
     ServeStaticModule.forRoot({
-  rootPath: resolve(process.cwd(), 'uploads'),
-  serveRoot: '/uploads',
-}),
-    SequelizeModule.forRoot({
-  dialect: 'postgres',
-  host: process.env.POSTGRES_HOST,
-  port: Number(process.env.POSTGRES_PORT),
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB,
+      rootPath: resolve(process.cwd(), 'uploads'),
+      serveRoot: '/uploads',
+    }),
+    SequelizeModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        const databaseUrl =
+          config.get<string>('DATABASE_URL') ||
+          config.get<string>('POSTGRES_URL') ||
+          config.get<string>('POSTGRES_PRISMA_URL') ||
+          config.get<string>('POSTGRES_URL_NON_POOLING');
 
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
-    },
-  },
+        if (databaseUrl) {
+          return {
+            dialect: 'postgres' as const,
+            url: databaseUrl,
+            dialectOptions: {
+              ssl: { require: true, rejectUnauthorized: false },
+            },
+            models: [Admins, Contact, Abouts, Education, Projects, Socials, Skill],
+            autoLoadModels: true,
+            synchronize: true,
+            logging: false,
+          };
+        }
 
-  models: [Admins, Contact, Abouts, Education, Projects, Socials, Skill],
-  autoLoadModels: true,
-  synchronize: true,
-  logging: false,
-}),
+        const host = config.get<string>('POSTGRES_HOST');
+        const username = config.get<string>('POSTGRES_USER');
+        const password = config.get<string>('POSTGRES_PASSWORD');
+        const database = config.get<string>('POSTGRES_DB');
+
+        if (!host || !username || !password || !database) {
+          throw new Error(
+            'Database configuration is missing. Set DATABASE_URL or POSTGRES_* environment variables.',
+          );
+        }
+
+        return {
+          dialect: 'postgres' as const,
+          host,
+          port: Number(config.get<string>('POSTGRES_PORT') || 5432),
+          username,
+          password,
+          database,
+          dialectOptions: {
+            ssl: { require: true, rejectUnauthorized: false },
+          },
+          models: [Admins, Contact, Abouts, Education, Projects, Socials, Skill],
+          autoLoadModels: true,
+          synchronize: true,
+          logging: false,
+        };
+      },
+    }),
     AboutsModule,
     AdminsModule,
     ContactModule,
@@ -57,9 +88,9 @@ import { UploadModule } from './upload/upload.module';
     ProjectsModule,
     SocialsModule,
     SkillsModule,
-    UploadModule
+    UploadModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
