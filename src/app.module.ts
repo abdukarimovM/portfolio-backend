@@ -19,6 +19,8 @@ import { SocialsModule } from './socials/socials.module';
 import { SkillsModule } from './skills/skills.module';
 import { UploadModule } from './upload/upload.module';
 
+import { AppController } from './app.controller'; // <-- qo'shing
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -90,7 +92,7 @@ import { UploadModule } from './upload/upload.module';
     SkillsModule,
     UploadModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule { }
