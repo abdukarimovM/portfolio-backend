@@ -44,7 +44,7 @@ import { AppController } from './app.controller'; // <-- qo'shing
         if (databaseUrl) {
           return {
             dialect: 'postgres' as const,
-            url: databaseUrl,
+            uri: databaseUrl, // <-- 'url' o'rniga 'uri' bo'lishi shart
             dialectOptions: {
               ssl: { require: true, rejectUnauthorized: false },
             },
