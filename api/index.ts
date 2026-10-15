@@ -14,15 +14,8 @@ export const createServer = async () => {
     const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
     app.enableCors({
-        origin: [
-            'https://admin.abdukarimovm.uz',
-            'https://abdukarimovm.uz',
-            'http://localhost:3000',
-            'http://localhost:3001',
-        ],
+        origin: true,
         credentials: true,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
     });
 
     app.use(cookieParser());
@@ -34,6 +27,10 @@ export const createServer = async () => {
 };
 
 export default async function handler(req: any, res: any) {
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
     if (!cachedServer) {
         cachedServer = await createServer();
     }
