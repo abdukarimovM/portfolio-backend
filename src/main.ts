@@ -9,9 +9,15 @@ async function bootstrap() {
   const PORT = process.env.PORT || process.env.API_PORT || 3001;
 
   app.enableCors({
-    origin: true,
+    origin: [
+      'https://admin.abdukarimovm.uz',
+      'https://abdukarimovm.uz',
+      'http://localhost:3000',
+      'http://localhost:3001',
+    ],
     credentials: true,
   });
+
   app.use(cookieParser());
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
@@ -37,8 +43,6 @@ async function bootstrap() {
     next();
   });
 
-  await app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+  await app.listen(PORT, '0.0.0.0');
 }
 bootstrap();
