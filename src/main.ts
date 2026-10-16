@@ -3,19 +3,22 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser = require('cookie-parser');
+import { allowedOrigins } from './cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.getHttpAdapter().getInstance().disable('etag');
   const PORT = process.env.PORT || process.env.API_PORT || 3001;
 
   app.enableCors({
-    origin: [
-      'https://admin.abdukarimovm.uz',
-      'https://abdukarimovm.uz',
-      'http://localhost:3000',
-      'http://localhost:3001',
-    ],
+    origin: allowedOrigins,
     credentials: true,
+  });
+
+  app.use((_req, res, next) => {
+    res.setHeader('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0');
+    res.setHeader('Vary', 'Origin');
+    next();
   });
 
   app.use(cookieParser());
